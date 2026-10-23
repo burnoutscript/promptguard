@@ -67,7 +67,7 @@ def to_terminal(verdict: Verdict, color: bool = True) -> str:
             f"{paint(f'peso {match.weight:.2f}', DIM)}"
         )
         if match.evidence:
-            lines.append(paint(f"         “{match.evidence}”", DIM))
+            lines.append(paint(f'         "{match.evidence}"', DIM))
     lines.append("")
     return "\n".join(lines)
 

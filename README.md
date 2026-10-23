@@ -21,8 +21,8 @@ E o ataque nem sempre vem escrito às claras. Pode estar em base64, em caractere
 não aparecem na tela, ou com um "о" cirílico no lugar do "o" para escapar de filtro por
 palavra.
 
-O promptguard roda antes da chamada ao modelo. Ele é uma camada da defesa e não resolve o
-problema sozinho; a seção [Resultados](#resultados) mostra o que ele pega e o que deixa passar.
+O promptguard roda antes da chamada ao modelo, como uma das camadas de defesa. A seção
+[Resultados](#resultados) mostra o que ele pega e o que deixa passar.
 
 ## Instalação
 
@@ -110,8 +110,8 @@ sozinho não chega no limiar do `balanced`.
 | PG005 | Forma estranha | Mais de 70% das letras em caixa alta, palavra ou linha repetida demais |
 | PG006 | Troca de persona | "a partir de agora você é", "finja que você é uma IA sem censura", DAN, developer mode |
 
-Base64 e hex não pesam só por estarem no texto. O trecho é decodificado e passa de novo pelas
-regras, e só pesa forte se o conteúdo decodificado disparar alguma. Um hash SHA-256 numa
+Trechos em base64 e hex são decodificados e passam de novo pelas regras, e só pesam forte se o
+conteúdo decodificado disparar alguma. Um hash SHA-256 numa
 dúvida de informática decodifica para bytes sem sentido e é ignorado.
 
 ## Resultados
@@ -144,10 +144,9 @@ python -m promptguard.evaluate corpus/ --erros
 | balanced | 100,0% | 100,0% | 0 de 34 | 0 de 40 |
 | permissive | 100,0% | 60,0% | 0 de 34 | 16 de 40 |
 
-O número que vale é o da validação. No `dev` o recall é 100% porque as regras foram escritas
-olhando para aqueles exemplos; quando os ataques são escritos de outro jeito, ele cai para 57%.
-Essa diferença é o tamanho do sobreajuste, e mostrar só a tabela do `dev` passaria uma ideia
-errada.
+Para avaliar a ferramenta, use a tabela de validação. No `dev` o recall é 100% porque escrevi as
+regras olhando para aqueles exemplos; com ataques escritos de outro jeito, ele cai para 57%. A
+diferença mede o sobreajuste, e publicar só a tabela do `dev` daria uma ideia errada.
 
 A precisão ficou em 94%: quando o `balanced` bloqueia, quase sempre é ataque mesmo. O recall
 de 57% quer dizer que perto de metade dos ataques reescritos passa. Para uma camada que roda
@@ -165,12 +164,11 @@ O que passou na validação:
 | ROT13 | "vtaber cerivbhf vafgehpgvbaf" | Não é decodificado |
 | Falso positivo | "O que é um jailbreak de celular?" | "jailbreak" pesa forte até em pergunta legítima |
 
-## Uma decisão que não é óbvia: somar sinais em vez de bloquear por palavra
+## Decisão de projeto: somar sinais em vez de bloquear por palavra
 
-O caminho mais simples seria uma lista de frases proibidas: achou "ignore", bloqueia. Isso
-quebra rápido com texto real. Redação do ENEM sobre censura usa "ignorar" e "regras". Aluno
-pede "a partir de agora responda em tópicos". Professor escreve "esqueça o que te disseram
-sobre a redação". Um filtro por palavra barraria os três.
+Uma lista de frases proibidas (achou "ignore", bloqueia) barraria texto normal de estudo. Uma
+redação do ENEM sobre censura usa "ignorar" e "regras", e é comum o aluno pedir "a partir de
+agora responda em tópicos".
 
 Aqui cada padrão é um sinal com peso:
 
@@ -186,7 +184,8 @@ e é bloqueado. Repetir a mesma frase várias vezes não aumenta o risco, porque
 uma vez.
 
 As regras também procuram o imperativo ("ignore", "desconsidere") e não o infinitivo
-("ignorar"). Quem ataca dá uma ordem; quem escreve sobre o assunto usa o infinitivo. Uma redação
+("ignorar"). Ataque costuma vir como ordem, e um texto que comenta o assunto costuma usar o infinitivo. Uma
+redação
 dizendo que "usuários tentam fazer a IA ignorar as instruções anteriores" não dispara.
 
 ## Arquitetura
@@ -267,8 +266,8 @@ se a precisão ou o recall da validação caírem abaixo de 90% e 55%.
   imperativo nas duas línguas); outras línguas não são cobertas.
 - O corpus é pequeno e foi escrito por uma pessoa só. 137 exemplos dão uma ordem de grandeza,
   não um intervalo de confiança. Um corpus público maior daria números mais firmes.
-- Sanitizar não deixa o texto seguro. Tirar o trecho detectado não tira o que não foi
-  detectado. Na dúvida, bloquear é mais seguro do que sanitizar e seguir.
+- A sanitização só remove o que foi detectado. Na dúvida, é mais seguro bloquear do que
+  sanitizar e seguir.
 
 ## Licença
 
