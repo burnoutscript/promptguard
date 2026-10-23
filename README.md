@@ -6,7 +6,7 @@ Biblioteca Python que recebe o texto do usuário e devolve um risco de 0 a 1, as
 dispararam e uma versão limpa do texto. Pensei nela para o caso em que texto de aluno vai
 para um modelo de linguagem: redação, dúvida, resposta discursiva.
 
-[![CI](https://github.com/Kryip/promptguard/actions/workflows/ci.yml/badge.svg)](https://github.com/Kryip/promptguard/actions/workflows/ci.yml)
+[![CI](https://github.com/burnoutscript/promptguard/actions/workflows/ci.yml/badge.svg)](https://github.com/burnoutscript/promptguard/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Dependências](https://img.shields.io/badge/dependências-zero-success)
 ![Licença](https://img.shields.io/badge/licença-MIT-lightgrey)
@@ -27,7 +27,7 @@ O promptguard roda antes da chamada ao modelo, como uma das camadas de defesa. A
 ## Instalação
 
 ```bash
-git clone https://github.com/Kryip/promptguard.git
+git clone https://github.com/burnoutscript/promptguard.git
 cd promptguard
 pip install -e .
 ```

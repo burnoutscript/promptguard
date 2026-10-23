@@ -27,7 +27,7 @@ dev = ["pytest>=8.0", "ruff>=0.6"]
 promptguard = "promptguard.cli:main"
 
 [project.urls]
-Repository = "https://github.com/Kryip/promptguard"
+Repository = "https://github.com/burnoutscript/promptguard"
 
 [tool.setuptools.packages.find]
 where = ["src"]
